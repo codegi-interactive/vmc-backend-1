@@ -14,9 +14,9 @@ from .serializers import ChickenFlockSerializer, ChickenFlockToSerializer
 from common.custon_page_conf.custom_page import CustomPagePagination
 
 
-# 获取最大版本数据
+# 獲取最大版本數據
 def get_mxa_version_data(user_id, uuid):
-    # 查询当前用户最大版本数据
+    # 查詢當前用户最大版本數據
     sql = "SELECT t1.* FROM chicken_flock_info t1 INNER JOIN ( SELECT t.user_id, MAX( t.data_version ) AS data_version,t.id FROM chicken_flock_info t where 1 = 1  and t.user_id = '%s' and deleted = '0' " % user_id
     if uuid is not None:
         sql += " and  t.id = '%s' " % uuid
@@ -71,11 +71,11 @@ def update(request):
         return error("vaccineManufacturers 不能為空")
     info = get_mxa_version_data(user_id, data["id"])
     if info is None:
-        return error("数据不存在")
+        return error("數據不存在")
     if info.status == '0':
-        return error("鸡群已关闭,无法编辑")
+        return error("雞群已關閉,無法編輯")
     data_version = '0' if info is None else info.data_version
-    # 修复: 始终生成新的UUID，而不是重用现有ID
+    # 修復: 始終生成新的UUID，而不是重用現有ID
     uuid = get_uuid_str()
     ChickenFlockInfo.objects.create(id=uuid, user_id=user_id, batch_name=data["batchName"],
                                     incubation_date=data["incubationDate"],
@@ -120,7 +120,7 @@ def close(request, id):
         return error("未登錄")
     role = get_mxa_version_data(user_id, id)
     if role is None:
-        return error("数据不存在")
+        return error("數據不存在")
     ChickenFlockInfo.objects.filter(id=id).update(status='0')
     return ok("操作成功")
 
@@ -132,10 +132,10 @@ def query(request, id):
         return error("未登錄")
     role = get_mxa_version_data(user_id, id)
     if role is None:
-        return error("数据不存在")
+        return error("數據不存在")
     return ok({"id": id, "batchName": role.batch_name, "incubationDate": role.incubation_date,
                "chickenSeedlingNumber": role.chicken_seedling_number, "vaccineId": role.vaccine_id,
-               "vaccineManufacturers": role.vaccine_manufacturers, "status": "已关闭" if role.status == "0" else "活动中"
+               "vaccineManufacturers": role.vaccine_manufacturers, "status": "已關閉" if role.status == "0" else "活動中"
                })
 
 
@@ -155,7 +155,7 @@ def add_other_attributes(request):
         return error("d3 不能為空")
     info = ChickenFlockInfo.objects.filter(id=data["id"])
     if len(info) <= 0:
-        return error("数据不存在")
+        return error("數據不存在")
     else:
         info.update(d1=data["d1"], d2=data["d2"], d3=data["d3"],
                     update_time=get_format_time(),
@@ -182,7 +182,7 @@ def query_all(request):
     if user_id is None:
         return error("沒有許可權")
 
-    # 查询所有农场
+    # 查詢所有農場
     data = json.loads(request.body)
     # query_farm_sql = "select * from user_info where deleted = '0'  "
     # if "farmId" in data:
@@ -202,14 +202,14 @@ def query_all(request):
     if "farmName" in data:
         sql += " AND b.farm_name = '%s'" % data['farmName']
     if DEBUG:
-        print("所有农场所有鸡群其他信息，执行sql = %s" % sql)
+        print("所有農場所有雞群其他信息，執行sql = %s" % sql)
     roles = ChickenFlockToInfo.objects.raw(sql)
     # page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)
 
     roles_ser = ChickenFlockToSerializer(roles, many=True)
     return ok({"total": roles.__len__(), "list": roles_ser.data})
 
-    # 查询所有农场的鸡群的其他属性
+    # 查詢所有農場的雞群的其他屬性
     # for user in UserInfoSerializer(roles, many=True).data:
     #     sql = "SELECT t1.* FROM chicken_flock_info t1 INNER JOIN ( SELECT t.user_id, MAX( t.data_version ) AS data_version,t.id FROM chicken_flock_info t where 1 = 1  and t.user_id = '%s' and deleted = '0' " % \
     #           user["id"]

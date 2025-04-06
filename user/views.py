@@ -45,7 +45,7 @@ def check_login_parameter(request):
     return None
 
 
-# 生成验证码
+# 生成驗証碼
 def generate_code(n):
     all_chars = string.ascii_lowercase + string.ascii_uppercase + string.digits
     if system_conf.code_type_digit:
@@ -58,14 +58,14 @@ def generate_code(n):
     return result
 
 
-# 用户注册获取验证码
+# 用户注册獲取驗証碼
 @api_view(['POST'])
 def get_code_add(request):
     parameter = check_login_parameter(request)
     if not parameter is None:
         return parameter
     data = json.loads(request.body)
-    # 生成验证码，并将验证码保存到redis中，有效期為5分钟
+    # 生成驗証碼，並將驗証碼保存到redis中，有效期為5分鐘
     code = generate_code(4)
     code_key = "code_0_" + md5_encrypt(data["email"]) + md5_encrypt(data["phone"]) + md5_encrypt(data["email"])
     cache.set(code_key, code, 5 * 60)
@@ -76,7 +76,7 @@ def get_code_add(request):
 
 @api_view(['POST'])
 def add(request):
-    # 验证注册其他参数 password/farmName/code
+    # 驗証注册其他參數 password/farmName/code
     data = json.loads(request.body)
     if "password" not in data:
         return error("password 不能為空")
@@ -87,9 +87,9 @@ def add(request):
     code_key = "code_0_" + md5_encrypt(data["email"]) + md5_encrypt(data["phone"]) + md5_encrypt(data["email"])
     code = cache.get(code_key)
     print(code)
-    print("用户输入的验证码=" + data["code"])
+    print("用户輸入的驗証碼=" + data["code"])
     # if code is None or code != data["code"]:
-    #     return error("验证码错误")
+    #     return error("驗証碼錯誤")
     username = data["username"]
     emails = data["email"]
     phone = data["phone"]
@@ -125,14 +125,14 @@ def change_password(request):
         return error("newPassword 不能為空")
     user_info = UserInfo.objects.filter(Q(id=user_id))
     if len(user_info) == 0:
-        return error("系统错误")
+        return error("系统錯誤")
     if user_info[0].password != md5_encrypt(data["oldPassword"]):
-        return error("旧密码错误")
+        return error("舊密碼錯誤")
     user_info.update(password=md5_encrypt(data["newPassword"]))
     return ok("成功")
 
 
-# 重置密码获取验证码
+# 重置密碼獲取驗証碼
 @api_view(['POST'])
 def get_code_reset(request):
     data = json.loads(request.body)
@@ -140,9 +140,9 @@ def get_code_reset(request):
         return error("username 不能為空")
     user_info = UserInfo.objects.filter(Q(username=data["username"]))
     if len(user_info) <= 0:
-        # 无法根据用户名查询到用户，有可能被人撞库查询用户名，所以接口返回成功
+        # 無法根據用户名查詢到用户，有可能被人撞庫查詢用户名，所以接口返回成功
         return ok("成功")
-    # 生成验证码，并将验证码保存到redis中，有效期為5分钟
+    # 生成驗証碼，並將驗証碼保存到redis中，有效期為5分鐘
     code = generate_code(4)
     code_key = "code_1_" + md5_encrypt(data["username"])
     cache.set(code_key, code, 5 * 60)
@@ -163,11 +163,11 @@ def reset_password(request):
     code_key = "code_1_" + md5_encrypt(data["username"])
     code = cache.get(code_key)
     if settings.DEBUG:
-        print("重置密码,code_key = {}".format(code_key))
-        print("重置密码,生成code = {}".format(code))
-        print("重置密码,输入code = {}".format(data["code"]))
+        print("重置密碼,code_key = {}".format(code_key))
+        print("重置密碼,生成code = {}".format(code))
+        print("重置密碼,輸入code = {}".format(data["code"]))
     if code is None or code != data["code"]:
-        return error("验证码错误")
+        return error("驗証碼錯誤")
     UserInfo.objects.filter(Q(username=data["username"])).update(password=md5_encrypt(data["password"]))
     cache.delete(code_key)
     return ok("成功")
@@ -209,15 +209,15 @@ def login(request):
         return error("password 不能為空")
     user_info = UserInfo.objects.filter(Q(username=data["username"]) & Q(password=md5_encrypt(data["password"])))
     if len(user_info) == 0:
-        return error("用户名或密码错误")
-    # 启用单点登录功能
+        return error("用户名或密碼錯誤")
+    # 啟用單點登錄功能
     if system_conf.single_sign_on:
-        # 清除当前用户的token,当用户登錄时候，删除当前用户缓存的token
+        # 清除當前用户的token,當用户登錄時候，删除當前用户緩存的token
         all_keys = cache.keys('*')
         for key in all_keys:
             if user_info[0].id in cache.get(key):
                 cache.delete(key)
-    # 缓存token
+    # 緩存token
     token = get_uuid_str()
     cache.set(token, json.dumps(UserInfoSerializer(user_info, many=True).data))
     result = UserInfoSerializer(user_info, many=True).data[0]

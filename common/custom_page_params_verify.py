@@ -11,7 +11,7 @@ def is_number(string):
     return bool(pattern.match(string))
 
 
-# 分页参数校验
+# 分頁參數校驗
 def page_params_verify(request):
     try:
         request.query_params["page"]

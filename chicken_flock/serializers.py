@@ -35,9 +35,9 @@ class ChickenFlockSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
         if obj.status == "0":
-            return "已关闭"
+            return "已關閉"
         else:
-            return "活动中"
+            return "活動中"
 
 
 class ChickenFlockToSerializer(serializers.ModelSerializer):
@@ -80,6 +80,6 @@ class ChickenFlockToSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
         if obj.status == "0":
-            return "已关闭"
+            return "已關閉"
         else:
-            return "活动中"
+            return "活動中"

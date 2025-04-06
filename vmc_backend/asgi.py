@@ -17,7 +17,7 @@ import chat.routing
 application = ProtocolTypeRouter(
     {
         "http": django_asgi_app,
-        # 这里需要更改官网示例，将AuthMiddlewareStack改為我们刚才自定义的中间件
+        # 這裡需要更改官網示例，將AuthMiddlewareStack改為我们剛才自定義的中間件
         # "websocket": WsTokenVerify(URLRouter(chat.routing.websocket_urlpatterns))
         "websocket": AllowedHostsOriginValidator(
             AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns))

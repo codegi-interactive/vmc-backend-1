@@ -3,12 +3,12 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class CustomPagePagination(PageNumberPagination):
-    # 每页数目
+    # 每頁數目
     page_size = 10
-    # 前端最多能设置的每页数量
+    # 前端最多能設置的每頁數量
     max_page_size = 100
     page_size_query_param = 'size'
-    # 前端最多能设置的每页数量
+    # 前端最多能設置的每頁數量
     page_query_param = 'page'
 
     def __init__(self):

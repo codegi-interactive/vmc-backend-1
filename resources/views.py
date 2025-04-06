@@ -31,7 +31,7 @@ def save_file_local(request):
     file_type = file.name[file.name.index(".") + 1:]
     file_name = str(int(round(time.time() * 1000))) + file.name[file.name.index("."):]
     file_path = settings.MEDIA_ROOT
-    # 将文件保存到指定位置
+    # 將文件保存到指定位置
     with open(os.path.join(file_path, file_name), 'wb') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
@@ -45,7 +45,7 @@ def addFile(request):
         return error("沒有許可權")
     fileInfo = save_file_local(request)
     if fileInfo is None:
-        return error("文件无效")
+        return error("文件無效")
     uuid = get_uuid_str()
     save_resources(uuid, "1", fileInfo["fileType"], fileInfo["fileName"], fileInfo["filePath"], user_id)
     return ok("成功")
@@ -58,7 +58,7 @@ def add(request):
         return error("未登錄")
     fileInfo = save_file_local(request)
     if fileInfo is None:
-        return error("文件无效")
+        return error("文件無效")
     uuid = get_uuid_str()
     save_resources(uuid, "0", fileInfo["fileType"], fileInfo["fileName"], fileInfo["filePath"], user_id)
     return ok({"id": uuid, "type": fileInfo["fileType"]})
@@ -92,11 +92,11 @@ def delete(request, id):
 def download(request, id):
     resources_info = ResourcesInfo.objects.filter(id=id)
     if len(resources_info) == 0:
-        return HttpResponse(json.dumps({"message": 'success', "code": '-1', "data": "资源不存在"}),
+        return HttpResponse(json.dumps({"message": 'success', "code": '-1', "data": "資源不存在"}),
                             content_type="application/json")
     path = os.path.join(resources_info[0].path, resources_info[0].name)
     if not os.path.exists(path):
-        return HttpResponse(json.dumps({"message": 'success', "code": '-1', "data": "资源不存在"}),
+        return HttpResponse(json.dumps({"message": 'success', "code": '-1', "data": "資源不存在"}),
                             content_type="application/json")
     file_stream = open(path, 'rb')
     response = HttpResponse(file_stream.read())

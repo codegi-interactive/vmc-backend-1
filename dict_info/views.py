@@ -75,6 +75,6 @@ def delete(request):
         return error("dictType 不能為空")
     roles = DictInfo.objects.filter(Q(dict_type=data["dictType"]) & Q(deleted=0))
     if len(roles) <= 0:
-        return error("数据不存在")
+        return error("數據不存在")
     roles.update(deleted="1")
     return ok("成功")

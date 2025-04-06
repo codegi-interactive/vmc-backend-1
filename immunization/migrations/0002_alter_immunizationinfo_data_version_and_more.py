@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='immunizationinfo',
             name='data_version',
-            field=models.IntegerField(verbose_name='数据版本'),
+            field=models.IntegerField(verbose_name='數據版本'),
         ),
         migrations.AlterUniqueTogether(
             name='immunizationinfo',

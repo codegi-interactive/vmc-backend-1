@@ -17,13 +17,13 @@ from vmc_backend import settings
 from vmc_backend.settings import FARM_DEFAULT_BREEDING_QUOTE
 
 
-# 每个人只有一条养殖记录，每次修改数据，版本号新增1
-# 获取最大版本数据
+# 每個人只有一條養殖記錄，每次修改數據，版本號新增1
+# 獲取最大版本數據
 def get_mxa_version_data(user_id):
-    # 查询当前用户最大版本数据
+    # 查詢當前用户最大版本數據
     sql = "SELECT t1.* FROM farm_home_info t1 INNER JOIN ( SELECT t.user_id, MAX( t.data_version ) AS data_version FROM farm_home_info t where t.user_id = '%s' ) t2 ON t1.data_version = t2.data_version  AND t1.user_id = t2.user_id " % user_id
     if settings.DEBUG:
-        print("查询养殖记录最大版本数据，执行SQL=[ %s ]" % sql)
+        print("查詢養殖記錄最大版本數據，執行SQL=[ %s ]" % sql)
     roles = FarmHomeInfo.objects.raw(sql)
     if len(roles) <= 0:
         return None
@@ -57,7 +57,7 @@ def add(request):
     info = get_mxa_version_data(user_id)
     data_version = '0' if info is None else info.data_version
     
-    # 修复: 始终生成新的UUID，而不是重用旧ID
+    # 修復: 始終生成新的UUID，而不是重用舊ID
     uuid = get_uuid_str()
 
     FarmHomeInfo.objects.create(id=uuid, user_id=user_id, breeding_quota=data["breedingQuota"],
@@ -93,7 +93,7 @@ def query_page(request):
                 }
         return ok(item)
     else:
-        # 调整返回前端数据格式
+        # 調整返回前端數據格式
         chicken_seedlings_type = str(role.chicken_seedlings_type).replace("'", "").replace(" ", "")
         chicken_seedlings_type = chicken_seedlings_type[1:len(chicken_seedlings_type) - 1]
         item = {"breedingQuota": role.breeding_quota, "chickenSeedlingsType": chicken_seedlings_type.split(","),
@@ -114,7 +114,7 @@ def query_batch(request):
     if user_id is None:
         return error("未登錄")
 
-    # 查询当前用户最大版本数据
+    # 查詢當前用户最大版本數據
     sql = ("SELECT t1.* FROM chicken_flock_info t1 INNER JOIN ( SELECT t.user_id, MAX( t.data_version ) AS "
            "data_version,t.id FROM chicken_flock_info t where 1 = 1  and t.user_id = '%s' and deleted = '0' ") % user_id
     sql += " GROUP BY t.id ) t2 ON t1.data_version = t2.data_version  AND t1.user_id = t2.user_id and t1.id = t2.id"

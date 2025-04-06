@@ -17,21 +17,21 @@ class OrderInfoSerializer(serializers.ModelSerializer):
 
     def get_status(self, obj):
         if obj.order_status == "0":
-            return "未下单"
+            return "未下單"
         if obj.order_status == "1":
             return "未付款"
         if obj.order_status == "2":
             return "已付款"
         if obj.order_status == "3":
-            return "已发货"
+            return "已發貨"
         if obj.order_status == "4":
-            return "已收货"
+            return "已收貨"
         if obj.order_status == "20":
-            return "订单正常完成"
+            return "訂單正常完成"
         if obj.order_status == "21":
-            return "订单超时完成"
+            return "訂單超時完成"
         if obj.order_status == "22":
-            return "订单已取消"
+            return "訂單已取消"
 
 
 class OrderDetailsSerializer(serializers.ModelSerializer):

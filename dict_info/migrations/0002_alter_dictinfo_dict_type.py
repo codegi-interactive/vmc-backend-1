@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='dictinfo',
             name='dict_type',
-            field=models.CharField(max_length=32, verbose_name='类型'),
+            field=models.CharField(max_length=32, verbose_name='類型'),
         ),
     ]

@@ -13,7 +13,7 @@ from user.models import UserInfo
 from vmc_backend import settings
 
 
-# 判断当前用户使用登錄
+# 判斷當前使用者使用登錄
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -22,44 +22,44 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = None
         self.room_name = None
 
-    # 在线用户列表
+    # 在線用户列表
     users = {}
 
     def is_login(self, token, user_id):
         if token is None:
             if settings.DEBUG:
-                print("参数错误,token参数不存在,token = {}".format(token))
+                print("參數錯誤,token參數不存在,token = {}".format(token))
             return False
         use_info = cache.get(token)
         if use_info is None:
             if settings.DEBUG:
-                print("参数错误,token数据不存在, token = {}".format(token))
+                print("參數錯誤,token數據不存在, token = {}".format(token))
             return False
         if len(json.loads(use_info)) <= 0:
             if settings.DEBUG:
-                print("参数错误,token数据已过期, token = {}".format(token))
+                print("參數錯誤,token數據已過期, token = {}".format(token))
             return False
         if json.loads(use_info)[0]["id"] != user_id:
             if settings.DEBUG:
-                print("参数错误,token和聊天室ID不一致,token = {},user_id = ".format(token, user_id))
+                print("參數錯誤,token和聊天室ID不一致,token = {},user_id = ".format(token, user_id))
             return False
         return True
 
-    # 建立链接
+    # 建立鏈接
     async def connect(self):
         room_name = self.scope['url_route']['kwargs']['room_name']
         token = self.scope['url_route']['kwargs']['token']
         if not self.is_login(token, room_name):
-            # 如果用户未登錄,或者token和聊天室ID不一致，关闭连接
+            # 如果用户未登錄,或者token和聊天室ID不一致，關閉連接
             await self.close()
         else:
-            # 当前用户的所有连接
+            # 當前用户的所有連接
             channel_names = [self.channel_name]
             if room_name in self.users:
                 channel_names = channel_names + self.users[room_name]
             self.users[room_name] = channel_names
 
-            # 同意连接
+            # 同意連接
             await self.accept()
 
             chats = await self.query_by_accept_id(room_name)
@@ -99,11 +99,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         chat_msg_to_json["timestamp"] = get_int_time()
         chat_msg_to_json["sendName"] = await self.query_username_by_user_id(chat_msg_to_json["sendId"])
         uuid_item = get_uuid_str()
-        # 接收用户发送的消息,将消息入库
+        # 接收用户發送的消息,將消息入庫
         await self.save_msg(chat_msg_to_json, uuid_item)
         # 接收人ID
         accept_id = chat_msg_to_json["acceptId"]
-        # 如果接收人已经登錄，则直接发送
+        # 如果接收人已經登錄，則直接發送
         if accept_id in self.users:
             for channel_name in self.users[accept_id]:
                 await self.channel_layer.send(
@@ -113,7 +113,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'message': json.dumps(get_to_send_msg(chat_msg_to_json), ensure_ascii=False),
                     }
                 )
-            # 发送消息到用户之后，将已发送的消息设置為已发送
+            # 發送消息到用户之後，將已發送的消息設置為已發送
             await self.update_or_create(chat_msg_to_json, uuid_item)
 
     # Receive message from room group
@@ -123,7 +123,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': [message]
         }, ensure_ascii=False))
 
-    # 保存用户发送的消息到数据库
+    # 保存用户發送的消息到數據庫
     @database_sync_to_async
     def save_msg(self, text_data_json, uuid_item):
         MsgInfo.objects.create(id=uuid_item, send_id=text_data_json['sendId'], send_name=text_data_json['sendName'],

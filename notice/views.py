@@ -23,7 +23,7 @@ def add(request):
     if "text" not in data:
         return error("消息内容不能為空")
     if "title" not in data:
-        return error("标题不能為空")
+        return error("標題不能為空")
     if "resourcesId" not in data:
         return error("resourcesId 不能為空")
     if "msgTime" not in data:
@@ -58,7 +58,7 @@ def query_page(request):
     return ok_page(request, roles.__len__(), roles_ser.data)
 
 
-# 查询最新消息
+# 查詢最新消息
 @api_view(['POST'])
 def query_latest(request):
     user_id = is_ordinary_users_login(request)
@@ -91,7 +91,7 @@ def query_page_month(request):
     return ok_page(request, roles.__len__(), roles_ser.data)
 
 
-# 删除订单
+# 删除訂單
 @api_view(['GET'])
 def delete(request, id):
     user_id = is_admin_users_login(request)

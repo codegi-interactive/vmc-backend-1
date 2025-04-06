@@ -65,7 +65,7 @@ def query_page(request):
     sql = "select * from chat_msg_info where (send_id = '{0}' and accept_id = '{1}') or (send_id = '{2}' and accept_id = '{3}') order by timestamp ".format(
         data["sendId"], data["acceptId"], data["acceptId"], data["sendId"])
     if settings.DEBUG:
-        print("查询聊天记录，sql = %s" % sql)
+        print("查詢聊天記錄，sql = %s" % sql)
     roles = MsgInfo.objects.raw(sql)
     page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)
     roles_ser = MsgInfoSerializer(page_roles, many=True)
@@ -80,7 +80,7 @@ def query_self_page(request):
     sql = "select * from chat_msg_info where send_id = '{0}' or accept_id = '{1}' order by timestamp ".format(user_id,
                                                                                                                 user_id)
     if settings.DEBUG:
-        print("查询本人聊天记录，sql = %s" % sql)
+        print("查詢本人聊天記錄，sql = %s" % sql)
     roles = MsgInfo.objects.raw(sql)
     page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)
     roles_ser = MsgInfoSerializer(page_roles, many=True)

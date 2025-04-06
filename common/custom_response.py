@@ -11,7 +11,7 @@ def get_total_page(len, size):
         return int(len / size) + 1
 
 
-# 返回分页查询对象
+# 返回分頁查詢對象
 
 def ok_page(request, total_number, data):
     page = request.query_params["page"]
@@ -24,7 +24,7 @@ def ok_page(request, total_number, data):
                     status=status.HTTP_200_OK)
 
 
-# 返回对象
+# 返回對象
 def ok(data):
     return Response({"message": 'success', "code": '0', "data": data}, status=status.HTTP_200_OK)
 

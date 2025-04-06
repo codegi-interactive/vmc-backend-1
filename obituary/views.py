@@ -17,7 +17,7 @@ from common.uuid_utils import get_uuid_str
 from obituary.models import ObituaryInfo
 
 
-# 获取最大版本数据
+# 獲取最大版本數據
 def get_mxa_version_data(user_id, chicken_id, data_time):
     sql = "SELECT t1.* FROM obituary_info t1 INNER JOIN ( SELECT t.user_id,t.id, MAX( t.data_version ) AS data_version FROM obituary_info t WHERE 1 = 1 and t.user_id = '%s' and deleted = '0'" % user_id
     if data_time is not None:
@@ -54,7 +54,7 @@ def add(request):
         return error("dataTime 不能為空")
     info = get_mxa_version_data(user_id, data["chickenId"], data["dataTime"])
     data_version = '0' if info is None else info.data_version
-    # 修复: 始终生成新的UUID，而不是重用现有ID
+    # 修復: 始終生成新的UUID，而不是重用現有ID
     uuid = get_uuid_str()
     ObituaryInfo.objects.create(id=uuid, user_id=user_id, chicken_flock_id=data["chickenId"],
                                 chicken_seedling_number=data["chickenSeedlingNumber"],
@@ -73,7 +73,7 @@ def add(request):
     return ok("成功")
 
 
-# 根据
+# 根據
 def query_data(user_id, chicken_id, data_time):
     sql = "SELECT t1.* FROM obituary_info t1 INNER JOIN ( SELECT t.user_id,t.id, MAX( t.data_version ) AS data_version FROM obituary_info t WHERE 1 = 1 and t.user_id = '%s' and deleted = '0'" % user_id
     if data_time is not None:
@@ -82,7 +82,7 @@ def query_data(user_id, chicken_id, data_time):
         sql += " and chicken_flock_id  = '%s' " % chicken_id
     sql += " GROUP BY t.id  ) t2 ON t1.data_version = t2.data_version  	AND t1.id = t2.id and t1.user_id  = t2.user_id "
     if settings.DEBUG:
-        print("查询死淘率数据列表，执行SQL=[ %s ]" % sql)
+        print("查詢死淘率數據列表，執行SQL=[ %s ]" % sql)
     return ObituaryInfoSerializer(ObituaryInfo.objects.raw(sql), many=True).data
 
 
@@ -96,8 +96,8 @@ def query_page(request):
 
     data = json.loads(request.body)
 
-    # 1、需要查询到当前日期下 所有鸡群的死淘率
-    # 1.1、分页查询当前用户鸡群信息
+    # 1、需要查詢到當前日期下 所有雞群的死淘率
+    # 1.1、分頁查詢當前用户雞群信息
 
     sql = "SELECT t1.* FROM chicken_flock_info t1 INNER JOIN ( SELECT t.user_id, MAX( t.data_version ) AS data_version,t.id FROM chicken_flock_info t where 1 = 1  and t.user_id = '%s' and deleted = '0' " % user_id
 
@@ -112,7 +112,7 @@ def query_page(request):
     result = []
     for chicken in roles_ser.data:
         chicken_item = dict(chicken)
-        # 1.2 查询当前日期下，每个鸡群的死淘率信息
+        # 1.2 查詢當前日期下，每個雞群的死淘率信息
         chicken_item["obituaryList"] = query_data(user_id, chicken["id"],
                                                   data["dataTime"] if "dataTime" in data else None)
         result.append(chicken_item)

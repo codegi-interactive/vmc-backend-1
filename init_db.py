@@ -4,31 +4,31 @@ import django
 import subprocess
 import sys
 
-# 设置Django环境
+# 設置Django環境
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'vmc_backend.settings')
 django.setup()
 
-print("开始初始化数据库...")
+print("開始初始化數據庫...")
 
-# 获取所有应用
+# 獲取所有應用
 from django.apps import apps
 app_configs = apps.get_app_configs()
 app_names = [app.name for app in app_configs if not app.name.startswith('django.') and not app.name.startswith('rest_framework')]
 
-print(f"发现以下应用需要迁移: {', '.join(app_names)}")
+print(f"發現以下應用需要遷移: {', '.join(app_names)}")
 
-# 为每个应用创建迁移文件
+# 為每個應用創建遷移文件
 for app_name in app_names:
-    print(f"为应用 {app_name} 创建迁移文件...")
+    print(f"為應用 {app_name} 創建遷移文件...")
     try:
         subprocess.run([sys.executable, 'manage.py', 'makemigrations', app_name], check=True)
     except subprocess.CalledProcessError as e:
-        print(f"为应用 {app_name} 创建迁移文件时出错: {e}")
+        print(f"為應用 {app_name} 創建遷移文件時出錯: {e}")
 
-# 应用所有迁移
-print("应用所有迁移...")
+# 應用所有遷移
+print("應用所有遷移...")
 try:
     subprocess.run([sys.executable, 'manage.py', 'migrate'], check=True)
-    print("数据库迁移成功完成！")
+    print("數據庫遷移成功完成！")
 except subprocess.CalledProcessError as e:
-    print(f"应用迁移时出错: {e}") 
+    print(f"應用遷移時出錯: {e}") 

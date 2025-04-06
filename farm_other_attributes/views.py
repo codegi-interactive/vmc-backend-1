@@ -19,9 +19,9 @@ from vmc_backend import settings
 # Create your views here.
 
 
-# 获取最大版本数据
+# 獲取最大版本數據
 def get_mxa_version_data(farm_id, date_time,data):
-    # 查询当前用户最大版本数据
+    # 查詢當前用户最大版本數據
     sql = " SELECT t1.* FROM farm_other_attributes_info t1 INNER JOIN ( SELECT t.farm_id, t.data_time,MAX( t.data_version ) AS data_version FROM farm_other_attributes_info t where 1 = 1 and t.farm_id = '%s' " % farm_id
     if date_time is not None:
         sql += "and data_time = '%s' " % date_time
@@ -31,7 +31,7 @@ def get_mxa_version_data(farm_id, date_time,data):
         sql += "and bacterial_type = '%s' " % data['bacterialType']
     sql += " and deleted = '0' GROUP BY data_time  ) t2 ON t1.data_version = t2.data_version  	AND t1.data_time = t2.data_time  AND t1.farm_id = t2.farm_id"
     if settings.DEBUG:
-        print("查询农场其他信息最大数据版本，执行SQL=[ %s ]" % sql)
+        print("查詢農場其他信息最大數據版本，執行SQL=[ %s ]" % sql)
     roles = FarmOtherAttributesInfo.objects.raw(sql)
     if len(roles) <= 0:
         return None
@@ -45,7 +45,7 @@ def add(request):
         return error("未登錄")
     data = json.loads(request.body)
     if "dataTime" not in data:
-        return error("时间 不能為空")
+        return error("時間 不能為空")
     if "farmId" not in data:
         return error("farmId 不能為空")
     if "sensitive" not in data:
@@ -66,7 +66,7 @@ def add(request):
 
     info = get_mxa_version_data(data["farmId"], data["dataTime"],data)
     data_version = '0' if info is None else info.data_version
-    # 修复: 始终生成新的UUID，而不是重用现有ID
+    # 修復: 始終生成新的UUID，而不是重用現有ID
     uuid = get_uuid_str()
     FarmOtherAttributesInfo.objects.create(id=uuid, user_id=user_id, farm_id=data["farmId"],
                                            sensitive=data["sensitive"],
@@ -92,7 +92,7 @@ def delete(request, id):
         return error("未登錄")
     roles = FarmOtherAttributesInfo.objects.filter(Q(id=id))
     if len(roles) <= 0:
-        return error("数据不存在")
+        return error("數據不存在")
     roles.update(deleted="1")
     return ok("成功")
 
@@ -114,7 +114,7 @@ def getFarmOtherAttributes(farm_id, farm_name, data):
         sql += " AND t.bacterial_type = '%s' " % data["bacterialType"]
     sql += " and deleted = '0' GROUP BY data_time  ) t2 ON t1.data_version = t2.data_version  	AND t1.data_time = t2.data_time  AND t1.farm_id = t2.farm_id"
     if settings.DEBUG:
-        print("查询农场其他信息列表，执行SQL=[ %s ]" % sql)
+        print("查詢農場其他信息列表，執行SQL=[ %s ]" % sql)
     roles = FarmOtherAttributesInfo.objects.raw(sql)
     farmOtherAttributes = FarmOtherAttributesSerializer(roles, many=True).data
     return {"id": farm_id, "farmName": farm_name, "farmOtherAttributes": farmOtherAttributes}
@@ -130,7 +130,7 @@ def query_page(request):
 
     data = json.loads(request.body)
 
-    # 分页查询农场列表
+    # 分頁查詢農場列表
     query_farm_sql = "select * from user_info where deleted = '0' "
     if "farmName" in data:
         query_farm_sql += " and `farm_name` like '%%{0}%%' "
@@ -179,7 +179,7 @@ def query_date(request):
         sql += " and bacterial_type = '%s' " % data["bacterialType"];
     sql += " GROUP BY data_time ORDER BY data_time DESC"
     if settings.DEBUG:
-        print("查询农场其他信息，SQL = '%s' " % sql)
+        print("查詢農場其他信息，SQL = '%s' " % sql)
     roles = FarmOtherAttributesInfo.objects.raw(sql)
     page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)
     roles_ser = FarmOtherAttributesSerializer(page_roles, many=True)

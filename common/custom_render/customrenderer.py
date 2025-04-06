@@ -12,7 +12,7 @@ class customrenderer(JSONRenderer):
                 msg = 'success'
                 code = renderer_context["response"].status_code
 
-            # 自定义返回数据格式
+            # 自定義返回數據格式
             ret = {
                 'code': 0,
                 'msg': msg,

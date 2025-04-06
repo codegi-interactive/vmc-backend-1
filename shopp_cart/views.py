@@ -33,7 +33,7 @@ def add_commodity(request):
     if "number" in data:
         add_number = data["number"]
         if int(add_number) <= 0 or int(add_number) > 99:
-            return error("商品数量必须在1-99之间")
+            return error("商品數量必須在1-99之間")
     shopp_cart_info = ShoppCartInfo.objects.filter(Q(commodity_id=data["commodityId"]) & Q(user_id=user_id))
     if len(shopp_cart_info) == 0:
         save_shopp_cart(user_id, data["commodityId"], int(add_number))

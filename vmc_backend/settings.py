@@ -49,19 +49,19 @@ INSTALLED_APPS = [
     'clear',
     'farm_home',
     'farm_other_attributes',
-    # 饲料仓库管理
+    # 飼料倉庫管理
     'feed_warehouse_capacity',
-    # 精细饲料用量
+    # 精細飼料用量
     'fine_feed_dosage',
-    # 普通饲料用量
+    # 普通飼料用量
     'normal_feed_dosage',
-    # 鸡群信息
+    # 雞群信息
     'chicken_flock',
     # 死淘率
     'obituary',
-    # 用药记录
+    # 用藥記錄
     'medication_use',
-    # 问卷得分
+    # 問卷得分
     'questionnaire_score',
     # 字典
     'dict_info',
@@ -112,17 +112,17 @@ WSGI_APPLICATION = "demo.wsgi.application"
 
 DATABASES = {
     'default': {
-        # 表示使用的是mysql数据库的引擎
+        # 表示使用的是mysql數據庫的引擎
         'ENGINE': 'django.db.backends.mysql',
-        # 数据库的名字，可以在mysql的提示符下先创建好
+        # 數據庫的名字，可以在mysql的提示符下先創建好
         'NAME': '{}'.format(system_conf.mysql_conf_dbname),
-        # 数据库用户名
+        # 數據庫用户名
         'USER': '{}'.format(system_conf.mysql_conf_username),
-        # 数据库密码
+        # 數據庫密碼
         'PASSWORD': '{}'.format(system_conf.mysql_conf_password),
-        # 数据库主机，留空默认為"localhost"
+        # 數據庫主機，留空默認為"localhost"
         'HOST': '{}'.format(system_conf.mysql_conf_localhost),
-        # 数据库使用的端口
+        # 數據庫使用的端口
         'PORT': '{}'.format(system_conf.mysql_conf_port),
         'OPTIONS': {
             'charset': 'utf8mb4',
@@ -159,10 +159,10 @@ USE_TZ = False
 
 STATIC_URL = "static/"
 
-# MEDIA_ROOT指定了文件上传后的存储路径
+# MEDIA_ROOT指定了文件上傳後的存儲路徑
 MEDIA_ROOT = os.path.join(BASE_DIR, '{}'.format(system_conf.file_root))
 
-# 默认养殖额度
+# 默認養殖額度
 FARM_DEFAULT_BREEDING_QUOTE = 1000
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -173,15 +173,15 @@ ASGI_APPLICATION = "vmc_backend.asgi.application"
 
 # settings.py
 
-# 缓存设置
+# 緩存設置
 CACHES = {
     "default": {
-        # 使用django-redis的缓存
+        # 使用django-redis的緩存
         "BACKEND": "django_redis.cache.RedisCache",
-        # redis数据库的位置
+        # redis數據庫的位置
         "LOCATION": "redis://{}:{}/{}".format(system_conf.redis_conf_localhost, system_conf.redis_conf_port,
                                               system_conf.redis_conf_dbname),
-        # 缓存超时事件,单位:秒
+        # 緩存超時事件,單位:秒
         'TIMEOUT': "{}".format(system_conf.redis_conf_cache_time),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
@@ -192,7 +192,7 @@ CACHES = {
     }
 }
 
-# 聊天缓存设置
+# 聊天緩存設置
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",

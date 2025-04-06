@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                     "period_validity",
                     models.CharField(max_length=32, verbose_name="有效期"),
                 ),
-                ("vaccine_name", models.CharField(max_length=100, verbose_name="疫苗名称")),
+                ("vaccine_name", models.CharField(max_length=100, verbose_name="疫苗名稱")),
                 ("vaccine_type", models.CharField(max_length=100, verbose_name="疫苗毒株")),
                 (
                     "vaccine_batch",
@@ -34,38 +34,38 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "vaccine_date",
-                    models.CharField(max_length=100, verbose_name="疫苗接种日期"),
+                    models.CharField(max_length=100, verbose_name="疫苗接種日期"),
                 ),
                 (
                     "vaccine_frequency",
-                    models.CharField(max_length=100, verbose_name="疫苗接种次数"),
+                    models.CharField(max_length=100, verbose_name="疫苗接種次數"),
                 ),
                 (
                     "vaccine_dosage",
-                    models.CharField(max_length=100, verbose_name="疫苗接种剂量"),
+                    models.CharField(max_length=100, verbose_name="疫苗接種劑量"),
                 ),
                 (
                     "vaccine_route",
-                    models.CharField(max_length=100, verbose_name="疫苗接种途径"),
+                    models.CharField(max_length=100, verbose_name="疫苗接種途徑"),
                 ),
                 (
                     "vaccine_manufacturers",
-                    models.CharField(max_length=100, verbose_name="疫苗制造商"),
+                    models.CharField(max_length=100, verbose_name="疫苗製造商"),
                 ),
                 (
                     "vaccine_address",
-                    models.CharField(max_length=100, verbose_name="疫苗制造地"),
+                    models.CharField(max_length=100, verbose_name="疫苗製造地"),
                 ),
-                ("data_time", models.CharField(max_length=10, verbose_name="数据时间")),
-                ("data_version", models.CharField(max_length=3, verbose_name="数据版本")),
-                ("create_time", models.CharField(max_length=50, verbose_name="新增时间")),
+                ("data_time", models.CharField(max_length=10, verbose_name="數據時間")),
+                ("data_version", models.CharField(max_length=3, verbose_name="數據版本")),
+                ("create_time", models.CharField(max_length=50, verbose_name="新增時間")),
                 ("create_by", models.CharField(max_length=32, verbose_name="新增人")),
-                ("update_time", models.CharField(max_length=50, verbose_name="更新时间")),
+                ("update_time", models.CharField(max_length=50, verbose_name="更新時間")),
                 ("update_by", models.CharField(max_length=32, verbose_name="更新人")),
                 (
                     "deleted",
                     models.BooleanField(
-                        default=0, max_length=32, verbose_name="数据是否已删除[0:未删除,1:已删除]"
+                        default=0, max_length=32, verbose_name="數據是否已删除[0:未删除,1:已删除]"
                     ),
                 ),
             ],

@@ -5,7 +5,7 @@ from vmc_backend import settings
 
 def send_email(to, subject, message):
     if settings.DEBUG:
-        print("发送邮件,to={},subject={},message={}".format(to, subject, message))
+        print("發送郵件,to={},subject={},message={}".format(to, subject, message))
     send_mail(
         subject=subject,
         message=message,

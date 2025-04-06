@@ -18,25 +18,25 @@ class Migration(migrations.Migration):
                         max_length=32,
                         primary_key=True,
                         serialize=False,
-                        verbose_name="UUID,数据库主键",
+                        verbose_name="UUID,數據庫主鍵",
                     ),
                 ),
-                ("id", models.CharField(max_length=32, verbose_name="数据ID")),
+                ("id", models.CharField(max_length=32, verbose_name="數據ID")),
                 (
                     "farm_id",
-                    models.CharField(max_length=32, verbose_name="农场ID,问卷归属人ID"),
+                    models.CharField(max_length=32, verbose_name="農場ID,問卷歸屬人ID"),
                 ),
-                ("user_id", models.CharField(max_length=32, verbose_name="用户ID,答题人ID")),
-                ("total_score", models.IntegerField(verbose_name="总得分")),
-                ("data_version", models.IntegerField(verbose_name="数据版本")),
-                ("create_time", models.CharField(max_length=50, verbose_name="新增时间")),
+                ("user_id", models.CharField(max_length=32, verbose_name="用户ID,答題人ID")),
+                ("total_score", models.IntegerField(verbose_name="總得分")),
+                ("data_version", models.IntegerField(verbose_name="數據版本")),
+                ("create_time", models.CharField(max_length=50, verbose_name="新增時間")),
                 ("create_by", models.CharField(max_length=32, verbose_name="新增人")),
-                ("update_time", models.CharField(max_length=50, verbose_name="更新时间")),
+                ("update_time", models.CharField(max_length=50, verbose_name="更新時間")),
                 ("update_by", models.CharField(max_length=32, verbose_name="更新人")),
                 (
                     "deleted",
                     models.BooleanField(
-                        default=0, max_length=32, verbose_name="数据是否已删除[0:未删除,1:已删除]"
+                        default=0, max_length=32, verbose_name="數據是否已删除[0:未删除,1:已删除]"
                     ),
                 ),
             ],
@@ -53,31 +53,31 @@ class Migration(migrations.Migration):
                         max_length=32,
                         primary_key=True,
                         serialize=False,
-                        verbose_name="UUID,数据库主键",
+                        verbose_name="UUID,數據庫主鍵",
                     ),
                 ),
-                ("id", models.CharField(max_length=32, verbose_name="数据ID")),
+                ("id", models.CharField(max_length=32, verbose_name="數據ID")),
                 (
                     "farm_id",
-                    models.CharField(max_length=32, verbose_name="农场ID,问卷归属人ID"),
+                    models.CharField(max_length=32, verbose_name="農場ID,問卷歸屬人ID"),
                 ),
-                ("user_id", models.CharField(max_length=32, verbose_name="用户ID,答题人ID")),
+                ("user_id", models.CharField(max_length=32, verbose_name="用户ID,答題人ID")),
                 (
                     "username",
                     models.CharField(
-                        max_length=32, verbose_name="用户ID,答题人账号,数据库没有对应键,sql进行查询"
+                        max_length=32, verbose_name="用户ID,答題人賬號,數據庫没有對應鍵,sql進行查詢"
                     ),
                 ),
-                ("total_score", models.IntegerField(verbose_name="总得分")),
-                ("data_version", models.IntegerField(verbose_name="数据版本")),
-                ("create_time", models.CharField(max_length=50, verbose_name="新增时间")),
+                ("total_score", models.IntegerField(verbose_name="總得分")),
+                ("data_version", models.IntegerField(verbose_name="數據版本")),
+                ("create_time", models.CharField(max_length=50, verbose_name="新增時間")),
                 ("create_by", models.CharField(max_length=32, verbose_name="新增人")),
-                ("update_time", models.CharField(max_length=50, verbose_name="更新时间")),
+                ("update_time", models.CharField(max_length=50, verbose_name="更新時間")),
                 ("update_by", models.CharField(max_length=32, verbose_name="更新人")),
                 (
                     "deleted",
                     models.BooleanField(
-                        default=0, max_length=32, verbose_name="数据是否已删除[0:未删除,1:已删除]"
+                        default=0, max_length=32, verbose_name="數據是否已删除[0:未删除,1:已删除]"
                     ),
                 ),
             ],

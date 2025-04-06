@@ -16,12 +16,12 @@ def get_user_info(request):
         return None
     if len(json.loads(use_info)) <= 0:
         return None
-    # token续签
+    # token續簽
     cache.set(token, use_info)
     return json.loads(use_info)[0]
 
 
-# 判断当前是否登錄，未登錄，返回None，登錄，返回user_id
+# 判斷當前是否登錄，未登錄，返回None，登錄，返回user_id
 def is_ordinary_users_login(request):
     user_info = get_user_info(request)
     if user_info is None:
@@ -29,7 +29,7 @@ def is_ordinary_users_login(request):
     return user_info["id"]
 
 
-# 判断当前是否登錄，未登錄，返回None，登錄，返回user_id
+# 判斷當前是否登錄，未登錄，返回None，登錄，返回user_id
 def is_admin_users_login(request):
     user_info = get_user_info(request)
     if user_info is None:

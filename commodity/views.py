@@ -44,9 +44,9 @@ def add(request):
     if not is_number(str(data["weight"])):
         return error("weight 格式不正確")
     if int(data["weight"]) <= 0:
-        return error("重量必须大于0")
+        return error("重量必須大於0")
     if float(data["price"]) <= 0:
-        return error("价格必须大于0")
+        return error("價格必須大於0")
     price = int(float(data["price"]) * 100)
     weight = int(float(data["weight"]) * 1000)
     resources_info = ResourcesInfo.objects.filter(id=data["resourcesId"])
@@ -80,7 +80,7 @@ def query_page(request):
     if "weight" in data:
         sql += " and weight = '%s' " % int(float(data["weight"]) * 1000)
     if "name" in data:
-        # 代%的参数，只能如此拼接，否则会出现系统错误
+        # 代%的參數，只能如此拼接，否則會出現系统錯誤
         sql += " and `name` like '%%{0}%%' "
         sql = sql.format(data["name"])
     roles = CommodityInfo.objects.raw(sql)
@@ -96,6 +96,6 @@ def delete(request, id):
         return error("沒有許可權")
     commodity_info = CommodityInfo.objects.filter(id=id).update(deleted='1')
     if commodity_info == 0:
-        return error("待删除的数据不存在")
+        return error("待删除的數據不存在")
     else:
         return ok("删除成功")

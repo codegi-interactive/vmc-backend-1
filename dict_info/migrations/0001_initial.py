@@ -22,20 +22,20 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("user_id", models.CharField(max_length=32, verbose_name="用户ID")),
-                ("dict_type", models.CharField(max_length=32, verbose_name="养殖额度")),
+                ("dict_type", models.CharField(max_length=32, verbose_name="養殖額度")),
                 (
                     "chinese_name",
-                    models.TextField(max_length=10000, verbose_name="中文名称"),
+                    models.TextField(max_length=10000, verbose_name="中文名稱"),
                 ),
-                ("english_name", models.CharField(max_length=100, verbose_name="英文名称")),
-                ("create_time", models.CharField(max_length=50, verbose_name="新增时间")),
+                ("english_name", models.CharField(max_length=100, verbose_name="英文名稱")),
+                ("create_time", models.CharField(max_length=50, verbose_name="新增時間")),
                 ("create_by", models.CharField(max_length=32, verbose_name="新增人")),
-                ("update_time", models.CharField(max_length=50, verbose_name="更新时间")),
+                ("update_time", models.CharField(max_length=50, verbose_name="更新時間")),
                 ("update_by", models.CharField(max_length=32, verbose_name="更新人")),
                 (
                     "deleted",
                     models.BooleanField(
-                        default=0, max_length=32, verbose_name="数据是否已删除[0:未删除,1:已删除]"
+                        default=0, max_length=32, verbose_name="數據是否已删除[0:未删除,1:已删除]"
                     ),
                 ),
             ],

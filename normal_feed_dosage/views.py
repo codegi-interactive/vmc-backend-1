@@ -17,15 +17,15 @@ from .serializers import NormalFeedDosageInfoSerializer
 # Create your views here.
 
 
-# 获取最大版本数据
+# 獲取最大版本數據
 def get_mxa_version_data(user_id, date_time):
-    # 查询当前用户最大版本数据
+    # 查詢當前用户最大版本數據
     sql = " SELECT t1.* FROM normal_feed_dosage_info t1 INNER JOIN ( SELECT t.user_id, t.data_time,MAX( t.data_version ) AS data_version FROM normal_feed_dosage_info t where 1 = 1 and t.user_id = '%s' " % user_id
     if date_time is not None:
         sql += "and data_time = '%s' " % date_time
     sql += " and deleted = '0' GROUP BY data_time  ) t2 ON t1.data_version = t2.data_version  	AND t1.data_time = t2.data_time  AND t1.user_id = t2.user_id"
     if settings.DEBUG:
-        print("查询饲料用量数据最大版本数据，执行SQL=[ %s ]" % sql)
+        print("查詢飼料用量數據最大版本數據，執行SQL=[ %s ]" % sql)
     roles = NormalFeedDosageInfo.objects.raw(sql)
     if len(roles) <= 0:
         return None
@@ -39,22 +39,22 @@ def add(request):
         return error("未登錄")
     data = json.loads(request.body)
     if "chickenSeedFineFeedDosage" not in data:
-        return error("每月鸡苗精料用量 不能為空")
+        return error("每月雞苗精料用量 不能為空")
     if "chickenDevelopFineFeedDosage" not in data:
-        return error("每月中鸡精料用量 不能為空")
+        return error("每月中雞精料用量 不能為空")
     if "chickenMatureFineFeedDosage" not in data:
-        return error("每月大鸡精料用量 不能為空")
+        return error("每月大雞精料用量 不能為空")
     if "chickenLayingHensFineFeedDosage" not in data:
-        return error("每月下单母鸡精料用量 不能為空")
+        return error("每月下單母雞精料用量 不能為空")
     if "chickenLaterBorrowingFineFeedDosage" not in data:
-        return error("每月後借母鸡精料用量 不能為空")
+        return error("每月後借母雞精料用量 不能為空")
     if "chickenCockFineFeedDosage" not in data:
-        return error("每月公鸡精料用量 不能為空")
+        return error("每月公雞精料用量 不能為空")
     if "dataTime" not in data:
         return error("dataTime 不能為空")
     info = get_mxa_version_data(user_id, data["dataTime"])
     data_version = '0' if info is None else info.data_version
-    # 修复: 始终生成新的UUID，而不是重用现有ID
+    # 修復: 始終生成新的UUID，而不是重用現有ID
     uuid = get_uuid_str()
     NormalFeedDosageInfo.objects.create(id=uuid, user_id=user_id,
                                         chicken_seed_fine_feed_dosage=data["chickenSeedFineFeedDosage"],
@@ -82,7 +82,7 @@ def delete(request, id):
         return error("未登錄")
     roles = NormalFeedDosageInfo.objects.filter(Q(id=id))
     if len(roles) <= 0:
-        return error("数据不存在")
+        return error("數據不存在")
     roles.update(deleted="1")
     return ok("成功")
 
@@ -102,7 +102,7 @@ def query_page(request):
         sql += "and data_time = '%s' " % data["dataTime"]
     sql += " and deleted = '0' GROUP BY data_time  ) t2 ON t1.data_version = t2.data_version  	AND t1.data_time = t2.data_time  AND t1.user_id = t2.user_id"
     if settings.DEBUG:
-        print("查询饲料数据，执行SQL=[ %s ]" % sql)
+        print("查詢飼料數據，執行SQL=[ %s ]" % sql)
 
     roles = NormalFeedDosageInfo.objects.raw(sql)
     page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)

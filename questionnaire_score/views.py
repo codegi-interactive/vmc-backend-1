@@ -13,7 +13,7 @@ from .models import QuestionnaireScoreQueryInfo, QuestionnaireScoreInfo
 from .serializers import QuestionnaireScoreInfoSerializer
 
 
-# 获取最大版本数据
+# 獲取最大版本數據
 def get_mxa_version_data(farm_id, user_id):
     sql = " SELECT 	t1.*  FROM 	questionnaire_score_info t1 INNER JOIN ( SELECT t.id, t.farm_id, MAX( t.data_version ) AS data_version, t.user_id FROM questionnaire_score_info t WHERE 1 = 1 "
     if user_id is not None:
@@ -22,7 +22,7 @@ def get_mxa_version_data(farm_id, user_id):
         sql += " AND t.farm_id = '%s' " % farm_id
     sql += " ORDER BY t.id ) t2 ON t1.data_version = t2.data_version and  t1.id = t2.id "
     if settings.DEBUG:
-        print("查询当前问卷得分信息最大版本数据,sql = {}".format(sql))
+        print("查詢當前問卷得分信息最大版本數據,sql = {}".format(sql))
     roles = QuestionnaireScoreInfo.objects.raw(sql)
     if len(roles) <= 0:
         return None
@@ -41,7 +41,7 @@ def add(request):
         return error("totalScore 不能為空")
     user_info = UserInfo.objects.filter(id=data['farmId'])
     if len(user_info) == 0:
-        return error("农场不存在")
+        return error("農場不存在")
     info = get_mxa_version_data(data["farmId"], user_id)
     data_version = '0' if info is None else info.data_version
     id = get_uuid_str() if info is None else info.id
@@ -68,7 +68,7 @@ def query_total_score(request):
     if "farmId" in data:
         sql += " and id =  '%s' " % data["farmId"]
     if settings.DEBUG:
-        print("查询所有农场信息,sql = {}".format(sql))
+        print("查詢所有農場信息,sql = {}".format(sql))
     user_roles = UserInfo.objects.raw(sql)
     user_roles_ser = UserInfoSerializer(user_roles, many=True)
 
@@ -79,7 +79,7 @@ def query_total_score(request):
             sql += " AND t1.user_id = '%s' " % user["id"]
         sql += " order by total_score"
         if settings.DEBUG:
-            print("查询所有农场问卷得分信息,sql = {}".format(sql))
+            print("查詢所有農場問卷得分信息,sql = {}".format(sql))
         score_roles = QuestionnaireScoreQueryInfo.objects.raw(sql)
         score_roles_ser = QuestionnaireScoreInfoSerializer(score_roles, many=True)
         result.append({"farmId": user["id"], "farmIdName": user["farmName"], "scores": score_roles_ser.data})
@@ -96,7 +96,7 @@ def query_answer_list(request):
     sql += " AND t.user_id = '%s' " % user_id
     sql += " ORDER BY t.id ) t2 ON t1.data_version = t2.data_version and  t1.id = t2.id INNER join user_info u on t1.farm_id = u.id"
     if settings.DEBUG:
-        print("查询当事人回答问卷列表,sql = {}".format(sql))
+        print("查詢當事人回答問卷列表,sql = {}".format(sql))
     roles = QuestionnaireScoreQueryInfo.objects.raw(sql)
     roles_ser = QuestionnaireScoreInfoSerializer(roles, many=True)
     return ok(roles_ser.data)

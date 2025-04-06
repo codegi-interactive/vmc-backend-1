@@ -17,15 +17,15 @@ from .serializers import FeedWarehouseCapacityInfoSerializer
 # Create your views here.
 
 
-# 获取最大版本数据
+# 獲取最大版本數據
 def get_mxa_version_data(user_id, date_time):
-    # 查询当前用户最大版本数据
+    # 查詢當前用户最大版本數據
     sql = " SELECT t1.* FROM feed_warehouse_capacity_info t1 INNER JOIN ( SELECT t.user_id, t.data_time,MAX( t.data_version ) AS data_version FROM feed_warehouse_capacity_info t where 1 = 1 and t.user_id = '%s' " % user_id
     if date_time is not None:
         sql += "and data_time = '%s' " % date_time
     sql += " and deleted = '0' GROUP BY data_time  ) t2 ON t1.data_version = t2.data_version  	AND t1.data_time = t2.data_time  AND t1.user_id = t2.user_id"
     if settings.DEBUG:
-        print("查询料盒数据，执行SQL=[ %s ]" % sql)
+        print("查詢料盒數據，執行SQL=[ %s ]" % sql)
 
     roles = FeedWarehouseCapacityInfo.objects.raw(sql)
     if len(roles) <= 0:
@@ -61,7 +61,7 @@ def add(request):
         return error("dataTime 不能為空")
     info = get_mxa_version_data(user_id, data["dataTime"])
     data_version = '0' if info is None else info.data_version
-    # 修复: 始终生成新的UUID，而不是重用现有ID
+    # 修復: 始終生成新的UUID，而不是重用現有ID
     uuid = get_uuid_str()
     FeedWarehouseCapacityInfo.objects.create(id=uuid, user_id=user_id,
                                              mixed_feed_frequency=data["mixedFeedFrequency"],
@@ -94,7 +94,7 @@ def delete(request, id):
         return error("未登錄")
     roles = FeedWarehouseCapacityInfo.objects.filter(Q(id=id))
     if len(roles) <= 0:
-        return error("数据不存在")
+        return error("數據不存在")
     roles.update(deleted="1")
     return ok("成功")
 
@@ -113,7 +113,7 @@ def query_page(request):
         sql += "and data_time = '%s' " % data["dataTime"]
     sql += " and deleted = '0' GROUP BY data_time  ) t2 ON t1.data_version = t2.data_version  	AND t1.data_time = t2.data_time  AND t1.user_id = t2.user_id"
     if settings.DEBUG:
-        print("查询料盒数据，执行SQL=[ %s ]" % sql)
+        print("查詢料盒數據，執行SQL=[ %s ]" % sql)
 
     roles = FeedWarehouseCapacityInfo.objects.raw(sql)
     page_roles = CustomPagePagination().paginate_queryset(queryset=roles, request=request)
